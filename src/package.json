@@ -37,6 +37,7 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "setupFilesAfterEnv": ["./tests/teardown.ts"]
   }
 }
