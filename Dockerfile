@@ -10,11 +10,11 @@ COPY src/package*.json ./
 # Install dependencies
 RUN npm install
 
+# Update npm
+RUN npm install -g npm@10.4.0
+
 # Copy the rest of the application code to the container
 COPY ./src .
-
-# Build the Next.js application
-RUN npm run build
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
