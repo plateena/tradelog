@@ -8,6 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "baseUrl": "./",
+    "types": ["node", "jest", "mongoose"],
     "paths": {
       "*": ["node_modules/*"]
     }
