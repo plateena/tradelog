@@ -1,0 +1,36 @@
+# Dependency directories
+node_modules/
+dist/
+
+# Environment variables
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE or editor files
+.vscode/
+.idea/
+
+# Docker
+.dockerignore
+.docker/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build files
+*.tsbuildinfo
+
+# jest
+src/tests/coverage
