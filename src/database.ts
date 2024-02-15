@@ -2,6 +2,10 @@ import mongoose from "mongoose"
 
 let connection: mongoose.Mongoose
 
+export interface DB {
+    connect(): void
+}
+
 export async function connect(): Promise<void> {
     try {
         if (!connection) {
