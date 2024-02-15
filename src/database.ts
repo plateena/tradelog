@@ -4,6 +4,8 @@ let connection: mongoose.Mongoose
 
 export interface DB {
     connect(): void
+    getConnection(): mongoose.Connection
+    close(): void
 }
 
 export async function connect(): Promise<void> {
@@ -41,7 +43,7 @@ export function getConnection(): mongoose.Connection {
     return connection.connection
 }
 
-export const close = async () => {
+export const close = async (): Promise<void> => {
     if (!connection) {
         throw new Error("database connection has not been established.")
     }
