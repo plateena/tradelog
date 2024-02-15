@@ -11,12 +11,17 @@ services:
     environment:
       NODE_ENV: development
     stdin_open: true
+    depends_on:
+      - mongodb
 
-  # mongodb:
-  #   image: mongo
-  #   ports:
-  #     - "27017:27017"
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: example
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./mongodb/data:/data/db
+      - ./mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 

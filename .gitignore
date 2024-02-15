@@ -34,3 +34,6 @@ Thumbs.db
 
 # jest
 src/tests/coverage
+
+# Volumes data
+mongodb/data/*
