@@ -1,6 +1,6 @@
-import request, { Response } from "supertest"
-import { Server } from "http"
-import makeServer from "./make-app"
+import request, { Response } from 'supertest'
+import { Server } from 'http'
+import makeServer from './make-app'
 
 /**
  * @group app
@@ -8,15 +8,15 @@ import makeServer from "./make-app"
 
 let app: Server
 
-describe("App", () => {
+describe('App', () => {
     afterAll(() => {
         app.close()
     })
 
-    it("is running app", async () => {
+    it('is running app', async () => {
         app = await makeServer()
-        let rs: Response = await request(app).get("/test-running")
+        let rs: Response = await request(app).get('/test-running')
         expect(rs.status).toBe(200)
-        expect(rs.text).toBe("API is running")
+        expect(rs.text).toBe('API is running')
     })
 })

@@ -1,17 +1,16 @@
-import db from "./../database"
+import db from './../database'
 
 /**
  * @group db
  */
 
-describe("DB", () => {
-
+describe('DB', () => {
     afterAll(() => {
         db.close()
     })
 
-    it("can connect to database", async () => {
+    it('can connect to database', async () => {
         await db.connect()
         expect(db.getConnection().readyState).toBe(1)
-    }, 20000);
-});
+    }, 20000)
+})
