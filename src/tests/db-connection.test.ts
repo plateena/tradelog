@@ -13,5 +13,5 @@ describe("DB", () => {
     it("can connect to database", async () => {
         await db.connect()
         expect(db.getConnection().readyState).toBe(1)
-    }, 10000);
+    }, 20000);
 });

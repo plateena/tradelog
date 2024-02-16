@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-let connection: mongoose.Mongoose
+let connection: mongoose.Connection
 
 export interface DB {
     connect(): void
@@ -8,10 +8,10 @@ export interface DB {
     close(): void
 }
 
-export async function connect(): Promise<void> {
+const connect = async (): Promise<void> => {
     try {
         if (!connection) {
-            connection = await mongoose.connect(
+            connection = mongoose.createConnection(
                 "mongodb://mongodb:27017/tradelog",
                 {
                     user: "root",
@@ -21,12 +21,12 @@ export async function connect(): Promise<void> {
                 }
             )
 
-            await new Promise<void>((res, rej) => {
-                mongoose.connection.once("connected", () => {
-                    res()
+            await new Promise<void>((resolve, reject) => {
+                connection.on("connected", () => {
+                    resolve()
                 })
-                mongoose.connection.on("error", (err) => {
-                    rej(err)
+                connection.on("error", (err) => {
+                    reject(err)
                 })
             })
         }
@@ -36,18 +36,18 @@ export async function connect(): Promise<void> {
     }
 }
 
-export function getConnection(): mongoose.Connection {
+const getConnection = (): mongoose.Connection => {
     if (!connection) {
         throw new Error("database connection has not been established.")
     }
-    return connection.connection
+    return connection
 }
 
-export const close = async (): Promise<void> => {
+const close =  async (): Promise<void> => {
     if (!connection) {
         throw new Error("database connection has not been established.")
     }
-    return connection.connection.close()
+    return connection.close()
 }
 
 export default { connect, getConnection, close }
