@@ -1,6 +1,6 @@
 import request, { Response } from "supertest"
 import { Server } from "http"
-import makeServer from "./makeApp"
+import makeServer from "./make-app"
 
 /**
  * @group app
