@@ -50,6 +50,4 @@ export const close = async (): Promise<void> => {
     return connection.connection.close()
 }
 
-connect()
-
 export default { connect, getConnection, close }
