@@ -11,12 +11,13 @@ export interface DB {
 const connect = async (): Promise<void> => {
     try {
         if (!connection) {
+            const db_uri = `mongodb://${process.env.DB_URI}:${process.env.DB_PORT}/${process.env.DB_NAME}`
             connection = mongoose.createConnection(
-                "mongodb://mongodb:27017/tradelog",
+                db_uri,
                 {
-                    user: "root",
-                    pass: "example",
-                    authSource: "admin",
+                    user: process.env.DB_USER,
+                    pass: process.env.DB_PASS,
+                    authSource: process.env.DB_NAME,
                     maxPoolSize: 10,
                 }
             )
