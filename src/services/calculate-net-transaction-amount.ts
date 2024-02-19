@@ -21,15 +21,15 @@ export function calculateNetTransactionAmount(
     // Calculate stamp duty
     const stampDuty = calculateStampDuty(transactionAmount)
 
-    // Calculate total cost
-    const totalCost =
-        transactionAmount + brokerCommission + clearingFee + stampDuty
+    // Calculate total additional costs
+    const totalAdditionalCosts = brokerCommission + clearingFee + stampDuty
 
-    // Calculate net total amount
-    let netTotalAmount = transactionAmount - totalCost
+    // Calculate net transaction amount (amount user has to pay)
+    const netTransactionAmount = transactionAmount + totalAdditionalCosts
 
-    // Round the net total amount to 2 decimal places
-    netTotalAmount = Math.round(netTotalAmount * 100) / 100
+    // Round the net transaction amount to 2 decimal places
+    const roundedNetTransactionAmount =
+        Math.round(netTransactionAmount * 100) / 100
 
-    return netTotalAmount
+    return roundedNetTransactionAmount
 }

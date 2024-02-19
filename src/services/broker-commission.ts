@@ -23,3 +23,5 @@ export function calculateBrokerCommission(
 
     return roundedCommission
 }
+
+export default { calculateBrokerCommission }
