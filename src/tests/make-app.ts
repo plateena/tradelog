@@ -7,7 +7,14 @@ const mockDB: DB = {
     close: jest.fn(),
 }
 
-export const makeServer = async () => {
+export const makeServer = async (dbStatus = true) => {
+
+    if(dbStatus) {
+        ;(mockDB.connect as jest.Mock).mockResolvedValue(true)
+    } else {
+        ;(mockDB.connect as jest.Mock).mockRejectedValue(true)
+    }
+
     const app = await buildApp(mockDB)
 
     const portString: string | undefined = process.env.PORT

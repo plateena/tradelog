@@ -3,7 +3,7 @@ import mongoose, { Mongoose } from 'mongoose'
 let connection: Mongoose
 
 export interface DB {
-    connect(): void
+    connect(): Promise<boolean>
     getConnection(): mongoose.Connection
     close(): void
 }
@@ -21,6 +21,7 @@ const connect = async (): Promise<boolean> => {
                 connectTimeoutMS: 30000,
             })
 
+            console.log('Connected to MongoDB')
             return true
         }
     } catch (error) {
