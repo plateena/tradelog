@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import { DB } from './database'
+import apiRouter from './routes/api'
 
 export const DB_ERROR_MESSAGE = 'Database connection has not been established.'
 
@@ -19,12 +20,15 @@ const buildApp = async (db: DB) => {
         })
     }
 
+    app.use("/api", apiRouter)
+
     app.get('/test-running', (_: Request, res: Response) => {
         res.send('API is running')
     })
-    app.get('/*', (_: Request, res: Response) => {
-        res.send('Welcome')
-    })
+
+    // app.get('/*', (_: Request, res: Response) => {
+    //     res.send('Welcome')
+    // })
 
     return app
 }
