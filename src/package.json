@@ -24,33 +24,5 @@
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
     "mongoose": "^8.1.2"
-  },
-  "jest": {
-    "rootDir": "./",
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "runner": "groups",
-    "setupFiles": [
-      "./tests/jest.setup.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "collectCoverageFrom": [
-      "<rootDir>/**/*.ts"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "./server.ts",
-      "./types"
-    ]
   }
 }
