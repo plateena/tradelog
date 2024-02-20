@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import db from '../../database'
-import Tradelog, { ITradelog, TradeLogType } from './../../models/tradelog'
-
+import Tradelog from './../../models/tradelog'
+import { ITradelog, TradeLogType } from '../../types/interfaces'
 /**
  * @group db/mongo/models/mongoose
  */
@@ -13,7 +13,7 @@ describe('Tradelog', () => {
 
     afterAll(async () => {
         try {
-            await Tradelog.deleteMany({});
+            await Tradelog.deleteAll();
         } catch (err) {
             console.log(err)
         }
@@ -30,7 +30,7 @@ describe('Tradelog', () => {
 
         }
 
-        const savedTradelog = await Tradelog.create(tradelogData)
+        const savedTradelog = await Tradelog.create<ITradelog>(tradelogData)
 
         expect(savedTradelog._id).toBeDefined()
         expect(savedTradelog.symbol).toBe(tradelogData.symbol)

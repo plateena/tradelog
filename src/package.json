@@ -26,7 +26,7 @@
     "mongoose": "^8.1.2"
   },
   "jest": {
-    "rootDir": "./tests",
+    "rootDir": "./",
     "preset": "ts-jest",
     "testEnvironment": "node",
     "transform": {
@@ -34,7 +34,7 @@
     },
     "runner": "groups",
     "setupFiles": [
-      "./jest.setup.ts"
+      "./tests/jest.setup.ts"
     ],
     "moduleFileExtensions": [
       "ts",
@@ -43,6 +43,14 @@
       "jsx",
       "json",
       "node"
+    ],
+    "collectCoverageFrom": [
+      "<rootDir>/**/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "./server.ts",
+      "./types"
     ]
   }
 }

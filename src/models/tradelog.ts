@@ -1,17 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose'
-
-export enum TradeLogType {
-    buy = 'buy',
-    sell = 'sell',
-}
-
-export interface ITradelog {
-    symbol: string
-    price: number
-    unit: number
-    transactionDate: Date
-    type: TradeLogType
-}
+import { ITradeLogModel, ITradelog, TradeLogType } from '../types/interfaces'
 
 const TradelogSchema: Schema = new Schema({
     symbol: { type: String, required: true },
@@ -21,4 +9,16 @@ const TradelogSchema: Schema = new Schema({
     type: { type: String, enum: Object.values(TradeLogType), required: true },
 })
 
-export default mongoose.model<ITradelog>('Tradelog', TradelogSchema)
+TradelogSchema.statics.delete = async function <T>(id: number | string): Promise<T> {
+    return await (this as any).findByIdAndDelete(id);
+};
+
+TradelogSchema.statics.deleteAll = async function <T>(): Promise<T> {
+  return await (this as any).deleteMany({});
+};
+
+const TradelogModel: ITradeLogModel = mongoose.model<ITradelog, ITradeLogModel>('Tradelog', TradelogSchema)
+
+
+
+export default TradelogModel

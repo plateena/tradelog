@@ -22,6 +22,9 @@ const buildApp = async (db: DB) => {
     app.get('/test-running', (_: Request, res: Response) => {
         res.send('API is running')
     })
+    app.get('/*', (_: Request, res: Response) => {
+        res.send('Welcome')
+    })
 
     return app
 }

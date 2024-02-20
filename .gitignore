@@ -33,6 +33,7 @@ Thumbs.db
 *.tsbuildinfo
 
 # jest
+src/coverage
 src/tests/coverage
 
 # Volumes data
