@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express'
 import { DB } from './database'
 import apiRouter from './routes/api'
+import swaggerUi from 'swagger-ui-express'
+import swaggerDefinition from './docs/swagger'
 
 export const DB_ERROR_MESSAGE = 'Database connection has not been established.'
 
@@ -29,9 +31,8 @@ const buildApp = async (db: DB) => {
         res.send('API is running')
     })
 
-    app.get('/*', (_: Request, res: Response) => {
-        res.status(404).send('File Not Found')
-    })
+    // Serve Swagger UI at /api-docs endpoint
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDefinition));
 
     return app
 }
