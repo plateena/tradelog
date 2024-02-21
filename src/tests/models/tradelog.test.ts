@@ -40,4 +40,29 @@ describe('Tradelog', () => {
             tradelogData.transactionDate.toISOString()
         )
     })
+
+    it('can create tradelog with save method', async () => {
+        const tradelogData: ITradelog = {
+            symbol: 'AAPL',
+            price: 150.0,
+            unit: 10,
+            transactionDate: new Date(),
+            type: TradeLogType.buy
+
+        }
+
+        // Create a new trade log record
+        const newTradeLog = new Tradelog(tradelogData);
+
+        // Save the new trade log record to the database
+        const savedTradelog = await newTradeLog.save();
+
+        expect(savedTradelog._id).toBeDefined()
+        expect(savedTradelog.symbol).toBe(tradelogData.symbol)
+        expect(savedTradelog.price).toBe(tradelogData.price)
+        expect(savedTradelog.unit).toBe(tradelogData.unit)
+        expect(savedTradelog.transactionDate.toISOString()).toBe(
+            tradelogData.transactionDate.toISOString()
+        )
+    })
 })

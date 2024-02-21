@@ -19,6 +19,4 @@ TradelogSchema.statics.deleteAll = async function <T>(): Promise<T> {
 
 const TradelogModel: ITradeLogModel = mongoose.model<ITradelog, ITradeLogModel>('Tradelog', TradelogSchema)
 
-
-
 export default TradelogModel

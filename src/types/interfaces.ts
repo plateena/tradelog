@@ -15,9 +15,11 @@ export enum TradeLogType {
 
 // Model interface
 export interface IDefaultModel {
+    new<T>(doc?: T): this
     delete<T>(id: number | string): Promise<T>
     create<T>(arg0: ITradelog): Promise<T>
     deleteAll<T>(): Promise<T>
+    save(): Promise<ITradelog>
 }
 
 export interface ITradeLogModel extends IDefaultModel {
