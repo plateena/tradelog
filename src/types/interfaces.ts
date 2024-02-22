@@ -4,7 +4,7 @@ export interface ITradelog {
     symbol: string
     price: number
     unit: number
-    transactionDate: Date
+    transaction_date: Date
     type: TradeLogType
 }
 

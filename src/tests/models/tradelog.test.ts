@@ -25,7 +25,7 @@ describe('Tradelog', () => {
             symbol: 'AAPL',
             price: 150.0,
             unit: 10,
-            transactionDate: new Date(),
+            transaction_date: new Date(),
             type: TradeLogType.buy
 
         }
@@ -36,8 +36,8 @@ describe('Tradelog', () => {
         expect(savedTradelog.symbol).toBe(tradelogData.symbol)
         expect(savedTradelog.price).toBe(tradelogData.price)
         expect(savedTradelog.unit).toBe(tradelogData.unit)
-        expect(savedTradelog.transactionDate.toISOString()).toBe(
-            tradelogData.transactionDate.toISOString()
+        expect(savedTradelog.transaction_date.toISOString()).toBe(
+            tradelogData.transaction_date.toISOString()
         )
     })
 
@@ -46,7 +46,7 @@ describe('Tradelog', () => {
             symbol: 'AAPL',
             price: 150.0,
             unit: 10,
-            transactionDate: new Date(),
+            transaction_date: new Date(),
             type: TradeLogType.buy
 
         }
@@ -61,8 +61,8 @@ describe('Tradelog', () => {
         expect(savedTradelog.symbol).toBe(tradelogData.symbol)
         expect(savedTradelog.price).toBe(tradelogData.price)
         expect(savedTradelog.unit).toBe(tradelogData.unit)
-        expect(savedTradelog.transactionDate.toISOString()).toBe(
-            tradelogData.transactionDate.toISOString()
+        expect(savedTradelog.transaction_date.toISOString()).toBe(
+            tradelogData.transaction_date.toISOString()
         )
     })
 })

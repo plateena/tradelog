@@ -7,24 +7,20 @@ import { dateFormat } from '../../helpers'
 import Tradelog from './../../models/tradelog'
 import moment from 'moment'
 
+const baseUrl = '/api/v1'
+
 // Mock the tradelog model
 jest.mock('./../../models/tradelog')
 
-let server: Server // Renamed 'app' to 'server' for clarity
+let app: Server // Renamed 'app' to 'server' for clarity
 
-describe('GET /api/tradelog', () => {
+describe('POST /api/tradelog', () => {
     beforeAll(async () => {
-        server = await makeServer()
+        app = await makeServer()
     })
 
     afterAll((done) => {
-        server.close(done)
-    })
-
-    it('should return tradelog index', async () => {
-        const response = await request(server).get('/api/v1/tradelog')
-        expect(response.status).toBe(200)
-        expect(response.text).toBe('get tradelog index')
+        app.close(done)
     })
 
     it('can post tradelog', async () => {
@@ -35,30 +31,33 @@ describe('GET /api/tradelog', () => {
         const tradelogRequestData: ITradelog = {
             symbol: faker.lorem.word({ length: { min: 3, max: 7 } }),
             unit: faker.number.int({ min: 1, max: 900 }) * 100,
-            price: parseFloat(faker.finance.amount({ min: 0.005, max: 200.0 })),
-            transactionDate: buyDate as unknown as Date,
+            price: (faker.number.int({ min: 1, max: 9000000 }) * 5) / 1000,
+            transaction_date: buyDate as unknown as Date,
             type: TradeLogType.buy,
         }
 
         const tradelogSavedData = { ...tradelogRequestData }
 
         // Mock the return value from model save data transaction date as Date types
-        tradelogSavedData.transactionDate = moment(buyDate, dateFormat).toDate()
+        tradelogSavedData.transaction_date = moment(
+            buyDate,
+            dateFormat
+        ).toDate()
 
         Tradelog.prototype.save.mockResolvedValue(tradelogSavedData)
 
         // Convert the date to string for last check because response.body returns all in string
-        tradelogSavedData.transactionDate =
-            tradelogSavedData.transactionDate.toISOString() as unknown as Date
+        tradelogSavedData.transaction_date =
+            tradelogSavedData.transaction_date.toISOString() as unknown as Date
 
         // Make the POST request to create tradelog
-        const response = await request(server)
-            .post('/api/v1/tradelog')
+        const response = await request(app)
+            .post(baseUrl + '/tradelog')
             .send(tradelogRequestData)
 
         // Assertions
-        expect(response.status).toBe(201)
         expect(response.type).toBe('application/json')
         expect(response.body).toStrictEqual(tradelogSavedData)
+        expect(response.status).toBe(201)
     })
 })

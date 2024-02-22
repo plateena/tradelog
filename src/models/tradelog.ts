@@ -5,7 +5,7 @@ const TradelogSchema: Schema = new Schema({
     symbol: { type: String, required: true },
     price: { type: Number, required: true },
     unit: { type: Number, required: true },
-    transactionDate: { type: Date, required: true },
+    transaction_date: { type: Date, required: true },
     type: { type: String, enum: Object.values(TradeLogType), required: true },
 })
 

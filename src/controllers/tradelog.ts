@@ -3,9 +3,12 @@ import TradeLog from "../models/tradelog"; // Import your TradeLog model
 import { ITradeLogModel, ITradelog } from "../types/interfaces";
 import { dateFormat } from "./../helpers";
 import moment from "moment";
+import {validationResult  } from "express-validator";
+import { tradelogCreateValidation } from "./../middleware/validations/tradelog";
+import doValidaton from "./../middleware/validations/do-validation";
 
 // Path: ./controllers/tradelog.ts
-export const TradelogCreate = async (req: Request, res: Response) => {
+const create = async (req: Request, res: Response) => {
     try {
         // Extract data from the request body
         const { symbol, price, unit, transactionDate, type } = req.body;
@@ -33,3 +36,5 @@ export const TradelogCreate = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Failed to create trade log" });
     }
 }
+
+export const TradelogCreate = [tradelogCreateValidation, doValidaton, create];
