@@ -1,9 +1,9 @@
 import request from 'supertest'
 import { Server } from 'http'
 import makeServer from './../make-app'
-import { faker } from '@faker-js/faker'
 import { ERROR_MESSAGES } from './../../middleware/validations/tradelog'
 import { TradeLogType } from './../../types/interfaces'
+import { genTradeLogData } from './../models/tradelog'
 
 const baseUrl = '/api/v1'
 
@@ -11,17 +11,6 @@ const baseUrl = '/api/v1'
 jest.mock('./../../models/tradelog')
 
 let app: Server // Renamed 'app' to 'server' for clarity
-
-// Function to generate valid tradelog data
-const generateValidTradelogData = () => {
-  return {
-    symbol: faker.lorem.word({ length: { min: 3, max: 7 } }),
-    price: faker.finance.amount(0.005, 10000, 3), // Generates a random price between 0.005 and 10000 with up to 3 decimal places
-    unit: faker.datatype.number({ min: 1, max: 900 }) * 100,
-    transaction_date: faker.date.recent().toISOString().split('T')[0],
-    type: TradeLogType.buy,
-  };
-};
 
 describe('POST /api/tradelog', () => {
     beforeAll(async () => {
@@ -48,28 +37,20 @@ describe('POST /api/tradelog', () => {
     })
 
     it('should return 400 if symbol is missing', async () => {
+        let { symbol, ...tradelogData } = genTradeLogData()
         const response = await request(app)
             .post(baseUrl + '/tradelog')
-            .send({
-                price: 0.01,
-                unit: 10,
-                transaction_date: '2022-01-01',
-                type: 'buy',
-            })
+            .send(tradelogData)
         expect(response.status).toBe(400)
         expect(response.body.errors[0].msg).toBe(ERROR_MESSAGES.SYMBOL_REQUIRED)
     })
 
     it('should return 400 if price is invalid', async () => {
+        const tradelogData = genTradeLogData()
+        tradelogData.price = -1
         const response = await request(app)
             .post(baseUrl + '/tradelog')
-            .send({
-                symbol: faker.lorem.word(),
-                price: -1,
-                unit: 10,
-                transaction_date: '2022-01-01',
-                type: 'buy',
-            })
+            .send(tradelogData)
         expect(response.status).toBe(400)
         expect(response.body.errors[0].msg).toBe(
             ERROR_MESSAGES.PRICE_INVALID(-1)
@@ -77,30 +58,23 @@ describe('POST /api/tradelog', () => {
     })
 
     it('should return 400 if price is not in increments of 0.005', async () => {
+        const tradelogData = genTradeLogData()
+        tradelogData.price = 0.081
         const response = await request(app)
             .post(baseUrl + '/tradelog')
-            .send({
-                symbol: faker.lorem.word(),
-                price: 0.081,
-                unit: 10,
-                transaction_date: '2022-01-01',
-                type: 'buy',
-            })
+            .send(tradelogData)
         expect(response.status).toBe(400)
         expect(response.body.errors[0].msg).toBe(ERROR_MESSAGES.PRICE_INCREMENT)
     })
 
     it('should return 400 if transaction date is not a valid recent date', async () => {
         const invalidTransactionDate = '2022-01/02' // Invalid transaction date format
+        const tradelogData = genTradeLogData()
+        tradelogData.transaction_date =
+            invalidTransactionDate as unknown as Date
         const response = await request(app)
             .post(baseUrl + '/tradelog')
-            .send({
-                symbol: faker.lorem.word(),
-                price: 0.01,
-                unit: 10,
-                transaction_date: invalidTransactionDate,
-                type: 'buy',
-            })
+            .send(tradelogData)
 
         // Expect a 400 status code
         expect(response.status).toBe(400)
@@ -112,15 +86,11 @@ describe('POST /api/tradelog', () => {
     })
 
     it('should return 400 if unit is not a positive integer', async () => {
+        const tradelogData = genTradeLogData()
+        tradelogData.unit = 0
         const response = await request(app)
             .post(baseUrl + '/tradelog')
-            .send({
-                symbol: faker.lorem.word(),
-                price: 0.01,
-                unit: 0,
-                transaction_date: '2022-01-01',
-                type: 'buy',
-            })
+            .send(tradelogData)
         expect(response.status).toBe(400)
         expect(response.body.errors[0].msg).toBe(
             ERROR_MESSAGES.UNIT_POSITIVE_INTEGER
@@ -128,15 +98,11 @@ describe('POST /api/tradelog', () => {
     })
 
     it('should return 400 if type is invalid', async () => {
+        const tradelogData = genTradeLogData()
+        tradelogData.type = 'invalid' as TradeLogType
         const response = await request(app)
             .post(baseUrl + '/tradelog')
-            .send({
-                symbol: faker.lorem.word(),
-                price: 0.01,
-                unit: 10,
-                transaction_date: '2022-01-01',
-                type: 'invalid',
-            })
+            .send(tradelogData)
         expect(response.status).toBe(400)
         expect(response.body.errors[0].msg).toBe(
             ERROR_MESSAGES.INVALID_TRADE_LOG_TYPE('invalid')
