@@ -1,12 +1,12 @@
 import request from 'supertest'
 import { Server } from 'http'
-import makeServer from './../../make-app'
-import { ITradelog, TradeLogType } from './../../../types/interfaces'
+import makeServer from '@tests/make-app'
+import { ITradelog, TradeLogType } from '@type/interfaces'
 import { faker } from '@faker-js/faker'
-import { dateFormat } from './../../../helpers'
-import Tradelog from './../../../models/tradelog'
+import { dateFormat } from '~/helpers'
+import Tradelog from '@models/tradelog'
 import moment from 'moment'
-import { genTradeLogData } from './../../models/tradelog'
+import { genTradelogData } from '@tests/models/tradelog'
 
 /**
  * @group controller/tradelog
@@ -14,9 +14,9 @@ import { genTradeLogData } from './../../models/tradelog'
 const baseUrl = '/api/v1'
 
 // Mock the tradelog model
-jest.mock('./../../../models/tradelog')
+jest.mock('@models/tradelog')
 
-let app: Server // Renamed 'app' to 'server' for clarity
+let app: Server
 
 describe('POST /api/tradelog', () => {
     beforeAll(async () => {
@@ -28,11 +28,12 @@ describe('POST /api/tradelog', () => {
     })
 
     it('can post tradelog', async () => {
+
         // Create tradelog faker data with type ITradeLog
         const buyDate = moment(faker.date.recent({ days: 21 })).format(
             dateFormat
         )
-        const tradelogRequestData: ITradelog = genTradeLogData()
+        const tradelogRequestData: ITradelog = genTradelogData()
 
         const tradelogSavedData = { ...tradelogRequestData }
 

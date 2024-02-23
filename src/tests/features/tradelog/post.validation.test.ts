@@ -1,9 +1,9 @@
 import request from 'supertest'
 import { Server } from 'http'
 import makeServer from './../../make-app'
-import { ERROR_MESSAGES } from './../../../middleware/validations/tradelog'
-import { TradeLogType } from './../../../types/interfaces'
-import { genTradeLogData } from './../../models/tradelog'
+import { ERROR_MESSAGES } from '@middleware/validations/tradelog'
+import { TradeLogType } from '@type/interfaces'
+import { genTradelogData } from '@tests/models/tradelog'
 
 /**
  * @group validation/tradelog
@@ -12,7 +12,7 @@ import { genTradeLogData } from './../../models/tradelog'
 const baseUrl = '/api/v1'
 
 // Mock the tradelog model
-jest.mock('./../../../models/tradelog')
+jest.mock('@models/tradelog')
 
 let app: Server // Renamed 'app' to 'server' for clarity
 
@@ -41,7 +41,7 @@ describe('Validation POST /api/tradelog', () => {
     })
 
     it('should return 400 if symbol is missing', async () => {
-        let { symbol, ...tradelogData } = genTradeLogData()
+        let { symbol, ...tradelogData } = genTradelogData()
         const response = await request(app)
             .post(baseUrl + '/tradelog')
             .send(tradelogData)
@@ -49,8 +49,8 @@ describe('Validation POST /api/tradelog', () => {
         expect(response.body.errors[0].msg).toBe(ERROR_MESSAGES.SYMBOL_REQUIRED)
     })
 
-    it('should return 400 if price is invalid', async () => {
-        const tradelogData = genTradeLogData()
+    it('should return 400 if genTradelogDatad', async () => {
+        const tradelogData = genTradelogData()
         tradelogData.price = -1
         const response = await request(app)
             .post(baseUrl + '/tradelog')
@@ -61,8 +61,8 @@ describe('Validation POST /api/tradelog', () => {
         )
     })
 
-    it('should return 400 if price is not in increments of 0.005', async () => {
-        const tradelogData = genTradeLogData()
+    it('should return 400 if genTradelogData increments of 0.005', async () => {
+        const tradelogData = genTradelogData()
         tradelogData.price = 0.081
         const response = await request(app)
             .post(baseUrl + '/tradelog')
@@ -73,7 +73,7 @@ describe('Validation POST /api/tradelog', () => {
 
     it('should return 400 if transaction date is not a valid recent date', async () => {
         const invalidTransactionDate = '2022-01/02' // Invalid transaction date format
-        const tradelogData = genTradeLogData()
+        const tradelogData = genTradelogData()
         tradelogData.transaction_date =
             invalidTransactionDate as unknown as Date
         const response = await request(app)
@@ -88,9 +88,9 @@ describe('Validation POST /api/tradelog', () => {
             ERROR_MESSAGES.TRANSACTION_DATE_FORMAT(invalidTransactionDate)
         )
     })
-
+genTradelogData
     it('should return 400 if unit is not a positive integer', async () => {
-        const tradelogData = genTradeLogData()
+        const tradelogData = genTradelogData()
         tradelogData.unit = 0
         const response = await request(app)
             .post(baseUrl + '/tradelog')
@@ -100,9 +100,9 @@ describe('Validation POST /api/tradelog', () => {
             ERROR_MESSAGES.UNIT_POSITIVE_INTEGER
         )
     })
-
+genTradelogData
     it('should return 400 if type is invalid', async () => {
-        const tradelogData = genTradeLogData()
+        const tradelogData = genTradelogData()
         tradelogData.type = 'invalid' as TradeLogType
         const response = await request(app)
             .post(baseUrl + '/tradelog')

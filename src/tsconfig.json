@@ -8,13 +8,17 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "traceResolution": true,
+    "baseUrl": ".",
     "types": ["node", "jest", "mongoose"],
     "paths": {
-      "@model/*": ["models/*"],
-      "@types/*": ["types/*"],
+      "~/*": ["*"],
+      "@middleware/*": ["middleware/*"],
+      "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
+      "@tests/*": ["tests/*"],
+      "@type/*": ["types/*"],
       "*": ["node_modules/*"]
     }
   },

@@ -1,3 +1,6 @@
+import ts from 'typescript';
+import tsConfigPaths from 'tsconfig-paths';
+import path from 'path';
 /**
  * @group controller/tradelog
  */

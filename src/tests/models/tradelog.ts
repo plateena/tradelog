@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker'
-import { ITradelog, TradeLogType } from './../../types/interfaces'
-import { dateFormat } from '../../helpers'
+import { ITradelog, TradeLogType } from '@type/interfaces'
+import { dateFormat } from '~/helpers'
 import moment from 'moment'
 
-export const genTradeLogData = () => {
+export const genTradelogData = () => {
     const buyDate = moment(faker.date.recent({ days: 21 })).format(dateFormat)
     const tradelogData: ITradelog = {
         symbol: faker.helpers.fromRegExp('[A-Z]{3,7}'),
