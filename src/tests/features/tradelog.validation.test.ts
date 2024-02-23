@@ -1,12 +1,9 @@
 import request from 'supertest'
 import { Server } from 'http'
 import makeServer from './../make-app'
-import { ITradelog, TradeLogType } from './../../types/interfaces'
 import { faker } from '@faker-js/faker'
-import { dateFormat } from '../../helpers'
-import Tradelog from './../../models/tradelog'
-import moment from 'moment'
 import { ERROR_MESSAGES } from './../../middleware/validations/tradelog'
+import { TradeLogType } from './../../types/interfaces'
 
 const baseUrl = '/api/v1'
 
@@ -14,6 +11,17 @@ const baseUrl = '/api/v1'
 jest.mock('./../../models/tradelog')
 
 let app: Server // Renamed 'app' to 'server' for clarity
+
+// Function to generate valid tradelog data
+const generateValidTradelogData = () => {
+  return {
+    symbol: faker.lorem.word({ length: { min: 3, max: 7 } }),
+    price: faker.finance.amount(0.005, 10000, 3), // Generates a random price between 0.005 and 10000 with up to 3 decimal places
+    unit: faker.datatype.number({ min: 1, max: 900 }) * 100,
+    transaction_date: faker.date.recent().toISOString().split('T')[0],
+    type: TradeLogType.buy,
+  };
+};
 
 describe('POST /api/tradelog', () => {
     beforeAll(async () => {
@@ -63,7 +71,9 @@ describe('POST /api/tradelog', () => {
                 type: 'buy',
             })
         expect(response.status).toBe(400)
-        expect(response.body.errors[0].msg).toBe(ERROR_MESSAGES.PRICE_INVALID(-1))
+        expect(response.body.errors[0].msg).toBe(
+            ERROR_MESSAGES.PRICE_INVALID(-1)
+        )
     })
 
     it('should return 400 if price is not in increments of 0.005', async () => {

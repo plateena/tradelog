@@ -6,6 +6,7 @@ import { faker } from '@faker-js/faker'
 import { dateFormat } from '../../helpers'
 import Tradelog from './../../models/tradelog'
 import moment from 'moment'
+import { genTradeLogData } from '../models/tradelog'
 
 const baseUrl = '/api/v1'
 
@@ -28,13 +29,7 @@ describe('POST /api/tradelog', () => {
         const buyDate = moment(faker.date.recent({ days: 21 })).format(
             dateFormat
         )
-        const tradelogRequestData: ITradelog = {
-            symbol: faker.lorem.word({ length: { min: 3, max: 7 } }),
-            unit: faker.number.int({ min: 1, max: 900 }) * 100,
-            price: (faker.number.int({ min: 1, max: 9000000 }) * 5) / 1000,
-            transaction_date: buyDate as unknown as Date,
-            type: TradeLogType.buy,
-        }
+        const tradelogRequestData: ITradelog = genTradeLogData()
 
         const tradelogSavedData = { ...tradelogRequestData }
 
