@@ -33,7 +33,7 @@ describe('POST /api/tradelog', () => {
         const buyDate = moment(faker.date.recent({ days: 21 })).format(
             dateFormat
         )
-        const tradelogRequestData: ITradelog = genTradelogData()
+        const tradelogRequestData: ITradelog = genTradelogData() as ITradelog
 
         const tradelogSavedData = { ...tradelogRequestData }
 
