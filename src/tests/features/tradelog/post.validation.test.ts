@@ -1,18 +1,22 @@
 import request from 'supertest'
 import { Server } from 'http'
-import makeServer from './../make-app'
-import { ERROR_MESSAGES } from './../../middleware/validations/tradelog'
-import { TradeLogType } from './../../types/interfaces'
-import { genTradeLogData } from './../models/tradelog'
+import makeServer from './../../make-app'
+import { ERROR_MESSAGES } from './../../../middleware/validations/tradelog'
+import { TradeLogType } from './../../../types/interfaces'
+import { genTradeLogData } from './../../models/tradelog'
+
+/**
+ * @group validation/tradelog
+ */
 
 const baseUrl = '/api/v1'
 
 // Mock the tradelog model
-jest.mock('./../../models/tradelog')
+jest.mock('./../../../models/tradelog')
 
 let app: Server // Renamed 'app' to 'server' for clarity
 
-describe('POST /api/tradelog', () => {
+describe('Validation POST /api/tradelog', () => {
     beforeAll(async () => {
         app = await makeServer()
     })

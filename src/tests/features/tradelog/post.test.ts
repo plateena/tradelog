@@ -1,17 +1,20 @@
 import request from 'supertest'
 import { Server } from 'http'
-import makeServer from './../make-app'
-import { ITradelog, TradeLogType } from './../../types/interfaces'
+import makeServer from './../../make-app'
+import { ITradelog, TradeLogType } from './../../../types/interfaces'
 import { faker } from '@faker-js/faker'
-import { dateFormat } from '../../helpers'
-import Tradelog from './../../models/tradelog'
+import { dateFormat } from './../../../helpers'
+import Tradelog from './../../../models/tradelog'
 import moment from 'moment'
-import { genTradeLogData } from '../models/tradelog'
+import { genTradeLogData } from './../../models/tradelog'
 
+/**
+ * @group controller/tradelog
+ */
 const baseUrl = '/api/v1'
 
 // Mock the tradelog model
-jest.mock('./../../models/tradelog')
+jest.mock('./../../../models/tradelog')
 
 let app: Server // Renamed 'app' to 'server' for clarity
 
