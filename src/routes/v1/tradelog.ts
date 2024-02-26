@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { TradelogCreate } from './../../controllers/tradelog'
+import { TradelogCreate, TradelogIndex } from './../../controllers/tradelog'
 import doValidation from './../../middleware/validations/do-validation'
 import { tradelogCreateValidation } from './../../middleware/validations/tradelog'
 
@@ -10,6 +10,7 @@ router.get('/tradelog', (_: Request, res: Response) => {
 }).bind({ name: "tradelog.index" })
 
 router.route('/tradelog')
+    .get(...TradelogIndex)
     .post(...TradelogCreate)
 
 export default router

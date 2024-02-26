@@ -7,6 +7,11 @@ import {validationResult  } from "express-validator";
 import { tradelogCreateValidation } from "./../middleware/validations/tradelog";
 import doValidaton from "./../middleware/validations/do-validation";
 
+const main = async (req: Request, res: Response) => {
+    const tradelogResult = await TradeLog.search<ITradeLogModel, Request>(req);
+    return res.json(tradelogResult)
+}
+
 // Path: ./controllers/tradelog.ts
 const create = async (req: Request, res: Response) => {
     try {
@@ -37,4 +42,5 @@ const create = async (req: Request, res: Response) => {
     }
 }
 
+export const TradelogIndex = [doValidaton, main];
 export const TradelogCreate = [tradelogCreateValidation, doValidaton, create];
