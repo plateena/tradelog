@@ -27,8 +27,6 @@ describe('GET /api/v1/tradelog', () => {
     it('can get all the trade logs', async () => {
         let aspectedData = genTradelogData(10)
         const response = await request(app).get(baseUrl + '/tradelog')
-        // @TODO: <plateena711@gmail.com> delete this debug line
-        console.log(response.body)
 
         expect(response.status).toBe(200)
         expect(response.body).toStrictEqual(aspectedData)

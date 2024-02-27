@@ -94,7 +94,6 @@ describe('Tradelog', () => {
             }
         })
 
-        console.log(data)
         let transformedData = {
             data: data,
         }

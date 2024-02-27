@@ -4,9 +4,11 @@ import {
     ITradelog,
     TradeLogType,
     ISearch,
+    IPagination,
 } from '../types/interfaces'
 import { Request, query } from 'express'
-import BaseModel  from '@models/base-model'
+import BaseModel from '@models/base-model'
+import Tradelog from '@models/tradelog'
 
 const TradelogSchema: Schema = new Schema({
     symbol: { type: String, required: true },
@@ -30,13 +32,12 @@ TradelogSchema.statics.search = async function <T extends Document>(
     req: Request
 ): Promise<ISearch<T>> {
     const filters = parseFilters(req.query)
-
-    const result = await BaseModel((this as any),filters, req)
+    const result = await BaseModel(this as any, filters, req)
 
     return {
         status: 'success',
-        data: result[0].data.map((item: any) => item.document),
-        pagination: result[0].pagination
+        data: result[0]?.data.map((item: any) => item.document) || {},
+        pagination: result[0]?.pagination || ({} as unknown as IPagination),
     } as ISearch<T>
 }
 

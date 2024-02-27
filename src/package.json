@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node ./server.ts",
-    "start-dev": "nodemon -w ./docs/**/*.ts --experimental-modules --inspect -x 'ts-node ./server.ts'",
+    "start": "nodemon -w ./**/* --inspect -x 'npx tsx ./server.ts'",
+    "start-dev": "nodemon -w ./docs/**/*.ts --experimental-modules --inspect -x 'ts-node ./server.mjs'",
     "test": "NODE_ENV=test jest --color --verbose --detectOpenHandles"
   },
   "author": "zainundin.coders@gmail.com",
@@ -25,7 +25,9 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.1"
   },
   "dependencies": {
     "config": "^3.3.11",

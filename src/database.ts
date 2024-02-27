@@ -21,7 +21,7 @@ const connect = async (): Promise<boolean> => {
                 connectTimeoutMS: 30000,
             })
 
-            console.log('Connected to MongoDB')
+            // console.log('Connected to MongoDB')
             return true
         }
     } catch (error) {
