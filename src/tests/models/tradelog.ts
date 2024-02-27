@@ -6,7 +6,8 @@ import moment from 'moment'
 // Function to generate trade log data
 export const genTradelogData = (
     quantity: number = 1,
-    data: Partial<ITradelog> = {}
+    data: Partial<ITradelog> = {},
+    fake: boolean = false
 ): ITradelog | ITradelog[] => {
     if (!Number.isInteger(quantity) || quantity < 1) {
         throw new Error('Quantity must be a positive integer.')
@@ -20,7 +21,7 @@ export const genTradelogData = (
             symbol: faker.helpers.fromRegExp('[A-Z]{3,7}'),
             unit: faker.number.int({ min: 1, max: 900 }) * 100,
             price: (faker.number.int({ min: 1, max: 9000000 }) * 5) / 1000,
-            transaction_date: new Date(buyDate),
+            transaction_date: (!fake) ? new Date(buyDate): buyDate as unknown as Date,
             type: faker.helpers.arrayElement(
                 Object.values(TradeLogType)
             ) as TradeLogType,

@@ -1,18 +1,17 @@
-import { Request, Response } from "express";
-import TradeLog from "../models/tradelog"; // Import your TradeLog model
-import { ITradeLogModel, ITradelog } from "../types/interfaces";
-import { dateFormat } from "./../helpers";
+// Path: ./controllers/tradelog.ts
+import { Request, Response } from "express"
+import TradeLog from "@models/tradelog"
+import { ITradeLogModel } from "@type/interfaces"
+import { dateFormat } from "~/helpers"
 import moment from "moment";
-import {validationResult  } from "express-validator";
-import { tradelogCreateValidation } from "./../middleware/validations/tradelog";
-import doValidaton from "./../middleware/validations/do-validation";
+import { tradelogCreateValidation } from "@middleware/validations/tradelog";
+import doValidaton from "@middleware/validations/do-validation";
 
 const main = async (req: Request, res: Response) => {
     const tradelogResult = await TradeLog.search<ITradeLogModel, Request>(req);
     return res.json(tradelogResult)
 }
 
-// Path: ./controllers/tradelog.ts
 const create = async (req: Request, res: Response) => {
     try {
         // Extract data from the request body
