@@ -173,4 +173,22 @@ describe('Tradelog', () => {
             expect.arrayContaining([expect.objectContaining(searchData)])
         )
     })
+
+    it('MODEL tradelog: can retrieve empty data', async () => {
+        const req: Partial<Request> = {
+            query: {
+                'page': '1',
+            },
+        }
+
+        const result = await Tradelog.search<
+            ISearch<ITradelog>,
+            Partial<Request>
+        >(req)
+
+        console.log(result)
+        expect(result.status).toBe('success')
+        expect(result.data).toHaveLength(0)
+        expect(result.total).toBe(0)
+    })
 })
