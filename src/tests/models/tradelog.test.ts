@@ -23,7 +23,7 @@ describe('Tradelog', () => {
         await db.close()
     })
 
-    it('should insert data into the tradelog collection', async () => {
+    it('MODEL tradelog: should insert data into the tradelog collection', async () => {
         const tradelogData: ITradelog = {
             symbol: 'AAPL',
             price: 150.0,
@@ -43,7 +43,7 @@ describe('Tradelog', () => {
         )
     })
 
-    it('can create tradelog with save method', async () => {
+    it('MODEL tradelog: can create tradelog with save method', async () => {
         const tradelogData: ITradelog = {
             symbol: 'AAPL',
             price: 150.0,
@@ -67,16 +67,12 @@ describe('Tradelog', () => {
         )
     })
 
-    it('can retrieve all tradelog data', async () => {
+    it('MODEL tradelog: can retrieve all tradelog data', async () => {
         const tradelogData: ITradelog[] = genTradelogData(10) as ITradelog[]
         for (const tradelog of tradelogData) {
             await Tradelog.create<ITradelog>(tradelog)
         }
-        const req: Partial<Request> = {
-            // query: {
-            //     per_page: "12"
-            // },
-        }
+        const req: Partial<Request> = {}
 
         const result = await Tradelog.search<
             ISearch<ITradelog>,
@@ -84,12 +80,14 @@ describe('Tradelog', () => {
         >(req)
 
         // create new result with only partial of ITredelog
-        const data = result.data.map((data) => {
+        const data = result.data.map((data: any) => {
             return {
                 symbol: data.symbol,
                 price: data.price,
                 unit: data.unit,
-                transaction_date: moment(data.transaction_date).format(appConfig.format.date),
+                transaction_date: moment(data.transaction_date).format(
+                    appConfig.format.date
+                ),
                 type: data.type,
             }
         })

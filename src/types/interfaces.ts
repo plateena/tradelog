@@ -16,16 +16,17 @@ export enum TradeLogType {
 }
 
 export interface IPagination {
-    total: number
-    per_page: number
-    current_page: number
-    last_page: number
+    per_page: number | undefined
+    current_page: number | undefined
+    last_page: number | undefined
 }
 
 export interface ISearch<T> {
     status: string
+    _filter?: any[]
     data: Partial<T>[]
-    pagination: IPagination
+    total: number
+    pagination?: IPagination
 }
 
 // Model interface
