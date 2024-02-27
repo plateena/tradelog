@@ -102,4 +102,75 @@ describe('Tradelog', () => {
         expect(result.status).toBe('success')
         expect(result.data).toHaveLength(10)
     })
+
+    it('MODEL tradelog: can retrieve all tradelog data with pagination', async () => {
+        const tradelogData: ITradelog[] = genTradelogData(30) as ITradelog[]
+        for (const tradelog of tradelogData) {
+            await Tradelog.create<ITradelog>(tradelog)
+        }
+        const req: Partial<Request> = {
+            query: {
+                page: '1',
+            },
+        }
+
+        const result = await Tradelog.search<
+            ISearch<ITradelog>,
+            Partial<Request>
+        >(req)
+        expect(result.status).toBe('success')
+        expect(result.pagination?.last_page).toBe(2)
+    })
+
+    it('MODEL tradelog: can retrieve all tradelog data with pagination page 2', async () => {
+        const tradelogData: ITradelog[] = genTradelogData(30) as ITradelog[]
+        for (const tradelog of tradelogData) {
+            await Tradelog.create<ITradelog>(tradelog)
+        }
+        const req: Partial<Request> = {
+            query: {
+                page: '2',
+            },
+        }
+
+        const result = await Tradelog.search<
+            ISearch<ITradelog>,
+            Partial<Request>
+        >(req)
+        expect(result.status).toBe('success')
+        expect(result.pagination?.current_page).toBe(2)
+    })
+
+    it('MODEL tradelog: can retrieve data with symbol filter', async () => {
+        const tradelogData: ITradelog[] = genTradelogData(30) as ITradelog[]
+        for (const tradelog of tradelogData) {
+            await Tradelog.create<ITradelog>(tradelog)
+        }
+
+        const searchData: ITradelog = {
+            symbol: tradelogData[0].symbol,
+            price: tradelogData[0].price,
+            unit: tradelogData[0].unit,
+            transaction_date: moment(
+                tradelogData[0].transaction_date,
+                appConfig.format.date
+            ).toDate(),
+            type: tradelogData[0].type,
+        }
+
+        const req: Partial<Request> = {
+            query: {
+                'filter[symbol]': tradelogData[0].symbol,
+            },
+        }
+
+        const result = await Tradelog.search<
+            ISearch<ITradelog>,
+            Partial<Request>
+        >(req)
+        expect(result.status).toBe('success')
+        expect(result.data).toEqual(
+            expect.arrayContaining([expect.objectContaining(searchData)])
+        )
+    })
 })
