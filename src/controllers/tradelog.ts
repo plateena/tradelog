@@ -13,7 +13,6 @@ const main = async (req: Request, res: Response) => {
             ISearch<ITradelog>,
             Partial<Request>
         >(req)
-        console.log({ result: tradelogResult })
         return res.json(tradelogResult)
     } catch (error) {
         return res.status(500).json({ error })
