@@ -1,13 +1,16 @@
 import { Request } from 'express'
 import { Model, Document } from 'mongoose'
+import appConfig from '@config/app'
 
 const BaseModel = async (
     model: Model<Document>,
     filters: any,
     req: Request
 ) => {
-    const perPage: number = parseInt(req.query.per_page?.toString() || '15')
-    const page: number = parseInt(req.query.page?.toString() || '1')
+    const perPage: number = parseInt(
+        req.query[appConfig.pagination.query_name.per_page]?.toString() || appConfig.pagination.per_page
+    )
+    const page: number = parseInt(req.query[appConfig.pagination.query_name.page]?.toString() || '1')
     const skip: number = (page - 1) * perPage
 
     // Constructing aggregation pipeline

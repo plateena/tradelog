@@ -13,6 +13,7 @@
     "types": ["node", "jest", "mongoose"],
     "paths": {
       "~/*": ["*"],
+      "@config/*": ["config/*"],
       "@middleware/*": ["middleware/*"],
       "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
