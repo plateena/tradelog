@@ -3,6 +3,9 @@ import Tradelog from '@models/tradelog'
 import { ITradelog, TradeLogType, ISearch } from '@type/interfaces'
 import { genTradelogData } from '@tests/models/tradelog'
 import { Request } from 'express'
+import moment from 'moment'
+import appConfig from '@config/app'
+
 /**
  * @group db/mongo/models/mongoose
  */
@@ -12,12 +15,11 @@ describe('Tradelog', () => {
         await db.connect()
     })
 
+    afterEach(async () => {
+        const rs = await Tradelog.deleteAll()
+    })
+
     afterAll(async () => {
-        try {
-            await Tradelog.deleteAll()
-        } catch (err) {
-            console.log(err)
-        }
         await db.close()
     })
 
@@ -71,9 +73,9 @@ describe('Tradelog', () => {
             await Tradelog.create<ITradelog>(tradelog)
         }
         const req: Partial<Request> = {
-            query: {
-                per_page: "12"
-            },
+            // query: {
+            //     per_page: "12"
+            // },
         }
 
         const result = await Tradelog.search<
@@ -87,21 +89,20 @@ describe('Tradelog', () => {
                 symbol: data.symbol,
                 price: data.price,
                 unit: data.unit,
-                transaction_date: data.transaction_date,
+                transaction_date: moment(data.transaction_date).format(appConfig.format.date),
                 type: data.type,
             }
         })
 
+        console.log(data)
         let transformedData = {
             data: data,
         }
 
-        // @TODO: <plateena711@gmail.com> delete this debug line
-        console.log(result)
         expect(transformedData.data).toEqual(
             expect.arrayContaining(tradelogData)
         )
         expect(result.status).toBe('success')
-        expect(result.pagination.per_page).toBe(15)
+        expect(result.data).toHaveLength(10)
     })
 })

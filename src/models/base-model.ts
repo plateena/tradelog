@@ -8,9 +8,12 @@ const BaseModel = async (
     req: Request
 ) => {
     const perPage: number = parseInt(
-        req.query[appConfig.pagination.query_name.per_page]?.toString() || appConfig.pagination.per_page
+        req.query?.[appConfig.pagination.query_name.per_page]?.toString() ||
+            appConfig.pagination.per_page
     )
-    const page: number = parseInt(req.query[appConfig.pagination.query_name.page]?.toString() || '1')
+    const page: number = parseInt(
+        req.query?.[appConfig.pagination.query_name.page]?.toString() || '1'
+    )
     const skip: number = (page - 1) * perPage
 
     // Constructing aggregation pipeline

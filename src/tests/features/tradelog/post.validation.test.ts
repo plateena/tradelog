@@ -90,7 +90,7 @@ describe('Validation POST /api/tradelog', () => {
     })
 genTradelogData
     it('should return 400 if unit is not a positive integer', async () => {
-        const tradelogData = genTradelogData(1, {}, true) as ITradelog
+        const tradelogData = genTradelogData() as ITradelog
         tradelogData.unit = 0
         const response = await request(app)
             .post(baseUrl + '/tradelog')
@@ -102,7 +102,7 @@ genTradelogData
     })
 genTradelogData
     it('should return 400 if type is invalid', async () => {
-        const tradelogData = genTradelogData(1, {}, true) as ITradelog
+        const tradelogData = genTradelogData() as ITradelog
         tradelogData.type = 'invalid' as TradeLogType
         const response = await request(app)
             .post(baseUrl + '/tradelog')

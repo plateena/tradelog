@@ -1,5 +1,5 @@
-import buildApp from './app'
-import db from './database'
+import buildApp from '~/app'
+import db from '~/database'
 import dotenv from 'dotenv'
 import { Server } from 'http'
 

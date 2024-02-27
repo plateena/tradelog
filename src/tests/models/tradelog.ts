@@ -7,7 +7,7 @@ import moment from 'moment'
 export const genTradelogData = (
     quantity: number = 1,
     data: Partial<ITradelog> = {},
-    fake: boolean = false
+    fake: boolean = true
 ): ITradelog | ITradelog[] => {
     if (!Number.isInteger(quantity) || quantity < 1) {
         throw new Error('Quantity must be a positive integer.')

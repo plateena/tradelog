@@ -30,6 +30,7 @@ export interface ISearch<T> {
 
 // Model interface
 export interface IDefaultModel {
+    find<T>(arg0: {}): Promise<T[]>
     new <T>(doc?: T): this
     search<T, R>(req: R): Promise<T>
     delete<T>(id: number | string): Promise<T[]>

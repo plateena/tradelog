@@ -1,6 +1,6 @@
 // Path: ./controllers/tradelog.ts
 import { Request, Response } from "express"
-import TradeLog from "@models/tradelog"
+import Tradelog from "@models/tradelog"
 import { ITradeLogModel } from "@type/interfaces"
 import { dateFormat } from "~/helpers"
 import moment from "moment";
@@ -8,8 +8,9 @@ import { tradelogCreateValidation } from "@middleware/validations/tradelog";
 import doValidaton from "@middleware/validations/do-validation";
 
 const main = async (req: Request, res: Response) => {
-    const tradelogResult = await TradeLog.search<ITradeLogModel, Request>(req);
-    return res.json(tradelogResult)
+    const tradelogResult = await Tradelog.search<ITradeLogModel, Request>(req);
+    // return res.json(tradelogResult)
+    return res.json('test the body response')
 }
 
 const create = async (req: Request, res: Response) => {
@@ -20,7 +21,7 @@ const create = async (req: Request, res: Response) => {
         const transactionDateObject = moment(transactionDate, dateFormat).toDate()
 
         // Create a new trade log record
-        const newTradeLog = new TradeLog({
+        const newTradeLog = new Tradelog({
             symbol,
             price,
             unit,
@@ -41,5 +42,5 @@ const create = async (req: Request, res: Response) => {
     }
 }
 
-export const TradelogIndex = [doValidaton, main];
+export const TradelogIndex = [main];
 export const TradelogCreate = [tradelogCreateValidation, doValidaton, create];

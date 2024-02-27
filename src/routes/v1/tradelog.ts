@@ -5,10 +5,6 @@ import { tradelogCreateValidation } from './../../middleware/validations/tradelo
 
 const router = express.Router()
 
-router.get('/tradelog', (_: Request, res: Response) => {
-    return res.send('get tradelog index')
-}).bind({ name: "tradelog.index" })
-
 router.route('/tradelog')
     .get(...TradelogIndex)
     .post(...TradelogCreate)
