@@ -6,6 +6,7 @@ import {
     ISearch,
 } from '../types/interfaces'
 import { Request, query } from 'express'
+import BaseModel  from '@models/base-model'
 
 const TradelogSchema: Schema = new Schema({
     symbol: { type: String, required: true },
@@ -28,45 +29,14 @@ TradelogSchema.statics.deleteAll = async function <T>(): Promise<T> {
 TradelogSchema.statics.search = async function <T extends Document>(
     req: Request
 ): Promise<ISearch<T>> {
-    const perPage: number = parseInt(req.query.per_page?.toString() || '15')
-    const page: number = parseInt(req.query.page?.toString() || '1')
-    const skip: number = (page - 1) * perPage
     const filters = parseFilters(req.query)
 
-    // Constructing aggregation pipeline
-    const pipeline: any[] = [
-        {
-            $match: {
-                ...filters,
-            },
-        },
-        {
-            $facet: {
-                data: [
-                    ...(page ? [{ $skip: skip }, { $limit: perPage }] : []), // Conditionally apply $skip and $limit
-                    { $project: { _id: 0, document: '$$ROOT' } }, // Projecting fields excluding _id
-                ],
-                total: [{ $count: 'value' }],
-            },
-        },
-        {
-            $unwind: '$total',
-        },
-    ]
-
-    const result = await (this as any).aggregate(pipeline)
+    const result = await BaseModel((this as any),filters, req)
 
     return {
         status: 'success',
         data: result[0].data.map((item: any) => item.document),
-        pagination: {
-            total: result[0].total.value,
-            per_page: perPage,
-            current_page: page,
-            last_page: page
-                ? Math.ceil(result[0].total.value / perPage)
-                : undefined, // Calculate last_page only if page parameter is provided
-        },
+        pagination: result[0].pagination
     } as ISearch<T>
 }
 

@@ -1,4 +1,4 @@
-import { Request } from "express"
+import { Request } from 'express'
 
 // Properties Interface
 export interface ITradelog {
@@ -15,20 +15,22 @@ export enum TradeLogType {
     sell = 'sell',
 }
 
+export interface IPagination {
+    total: number
+    per_page: number
+    current_page: number
+    last_page: number
+}
+
 export interface ISearch<T> {
     status: string
     data: Partial<T>[]
-    pagination: {
-        total: number
-        per_page: number
-        current_page: number
-        last_page: number
-    }
+    pagination: IPagination
 }
 
 // Model interface
 export interface IDefaultModel {
-    new<T>(doc?: T): this
+    new <T>(doc?: T): this
     search<T, R>(req: R): Promise<T>
     delete<T>(id: number | string): Promise<T[]>
     create<T>(arg0: ITradelog): Promise<T>
@@ -36,5 +38,4 @@ export interface IDefaultModel {
     save(): Promise<ITradelog>
 }
 
-export interface ITradeLogModel extends IDefaultModel {
-}
+export interface ITradeLogModel extends IDefaultModel {}
