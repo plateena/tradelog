@@ -15,6 +15,7 @@ export default {
     moduleNameMapper: {
         "^~/(.*)$": "<rootDir>/$1",
         "^@config/(.*)$": "<rootDir>/config/$1",
+        "^@factories/(.*)$": "<rootDir>/tests/factories/$1",
         "^@middleware/(.*)$": "<rootDir>/middleware/$1",
         "^@models/(.*)$": "<rootDir>/models/$1",
         "^@routes/(.*)$": "<rootDir>/routes/$1",
