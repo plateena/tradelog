@@ -1,9 +1,34 @@
 import { Request } from 'express'
-import { Model, Document } from 'mongoose'
+import { Model, Document, Schema } from 'mongoose'
 import appConfig from '@config/app'
 import { ISearch, IPagination } from '@type/interfaces'
 
-const BaseModel = async <T>(
+export const BaseModel = <T extends Document>(
+    schema: Schema<T>,
+    options?: any
+) => {
+    schema.statics.delete = async function <T>(
+        id: number | string
+    ): Promise<T> {
+        return await (this as any).findByIdAndDelete(id)
+    }
+
+    schema.statics.deleteAll = async function <T>(): Promise<T> {
+        return await (this as any).deleteMany({})
+    }
+
+    schema.statics.search = async function <T>(
+        this: Model<T>,
+        req: Request
+    ): Promise<ISearch<T>> {
+        const filters = options.parseFilters(req.query) // Use the injected parseFilters function
+        const result = await BaseQuery<T>(this as any, filters, req)
+
+        return result
+    }
+}
+
+const BaseQuery = async <T>(
     model: Model<Document>,
     filters: any,
     req: Request
@@ -59,7 +84,9 @@ const BaseModel = async <T>(
         status: 'success',
         data: result[0]?.data.map((item: any) => item.document) || [],
         total: result[0]?.totals || 0,
-        ...(!isNaN(page) ? {pagination: result[0]?.pagination || ({} as IPagination) } : {}),
+        ...(!isNaN(page)
+            ? { pagination: result[0]?.pagination || ({} as IPagination) }
+            : {}),
     }
 }
 

@@ -1,14 +1,10 @@
-import mongoose, { Schema, Document } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import {
     ITradeLogModel,
     ITradelog,
     TradeLogType,
-    ISearch,
-    IPagination,
 } from '@type/interfaces'
-import { Request, query } from 'express'
-import BaseModel from '@models/base-model'
-import Tradelog from '@models/tradelog'
+import { BaseModel } from '@models/base-model'
 
 const TradelogSchema: Schema = new Schema({
     symbol: { type: String, required: true },
@@ -18,24 +14,7 @@ const TradelogSchema: Schema = new Schema({
     type: { type: String, enum: Object.values(TradeLogType), required: true },
 })
 
-TradelogSchema.statics.delete = async function <T>(
-    id: number | string
-): Promise<T> {
-    return await (this as any).findByIdAndDelete(id)
-}
-
-TradelogSchema.statics.deleteAll = async function <T>(): Promise<T> {
-    return await (this as any).deleteMany({})
-}
-
-TradelogSchema.statics.search = async function <T extends Document>(
-    req: Request
-): Promise<ISearch<T>> {
-    const filters = parseFilters(req.query)
-    const result = await BaseModel<ITradelog>(this as any, filters, req)
-
-    return result as unknown as ISearch<T>
-}
+TradelogSchema.plugin(BaseModel, { parseFilters: parseFilters })
 
 function parseFilters(query: any) {
     const filters: any = {}
@@ -55,7 +34,7 @@ function parseFilters(query: any) {
     return filters
 }
 
-const TradelogModel: ITradeLogModel = mongoose.model<ITradelog, ITradeLogModel>(
+const TradelogModel = mongoose.model<ITradelog, ITradeLogModel>(
     'Tradelog',
     TradelogSchema
 )
