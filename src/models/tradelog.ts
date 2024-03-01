@@ -2,8 +2,10 @@ import mongoose, { Schema } from 'mongoose'
 import {
     ITradeLogModel,
     ITradelog,
-    TradeLogType,
-} from '@type/interfaces'
+} from '@type/interface.d'
+import {
+    TradeLogType
+} from '@type/enums'
 import { BaseModel } from '@models/base-model'
 
 const TradelogSchema: Schema = new Schema({

@@ -1,14 +1,17 @@
 import db from '~/database'
 import Tradelog from '@models/tradelog'
-import { ITradelog, TradeLogType, ISearch } from '@type/interfaces'
-import { genTradelogData } from '@tests/models/tradelog'
+import type { ITradelog, ISearch } from '@type/interface'
+import { TradeLogType } from '@type/enums'
 import { Request } from 'express'
 import moment from 'moment'
 import appConfig from '@config/app'
+import TradeLogFactory from '@factories/tradelog-factory'
 
 /**
  * @group db/mongo/models/mongoose
  */
+
+let num: number = 1
 
 describe('Tradelog', () => {
     beforeAll(async () => {
@@ -16,21 +19,17 @@ describe('Tradelog', () => {
     })
 
     afterEach(async () => {
-        const rs = await Tradelog.deleteAll()
+        await Tradelog.deleteAll()
     })
 
     afterAll(async () => {
         await db.close()
     })
 
-    it('MODEL tradelog: should insert data into the tradelog collection', async () => {
-        const tradelogData: ITradelog = {
-            symbol: 'AAPL',
-            price: 150.0,
-            unit: 10,
-            transaction_date: new Date(),
+    it(`#${num++}:MODEL tradelog: should insert data into the tradelog collection`, async () => {
+        const tradelogData: ITradelog = TradeLogFactory.withState({
             type: TradeLogType.buy,
-        }
+        }).make() as ITradelog
 
         const savedTradelog = await Tradelog.create<ITradelog>(tradelogData)
 
@@ -39,18 +38,17 @@ describe('Tradelog', () => {
         expect(savedTradelog.price).toBe(tradelogData.price)
         expect(savedTradelog.unit).toBe(tradelogData.unit)
         expect(savedTradelog.transaction_date.toISOString()).toBe(
-            tradelogData.transaction_date.toISOString()
+            moment(
+                tradelogData.transaction_date,
+                appConfig.format.date
+            ).toISOString()
         )
     })
 
-    it('MODEL tradelog: can create tradelog with save method', async () => {
-        const tradelogData: ITradelog = {
-            symbol: 'AAPL',
-            price: 150.0,
-            unit: 10,
-            transaction_date: new Date(),
+    it(`#${num++}:MODEL tradelog: can create tradelog with save method`, async () => {
+        const tradelogData: ITradelog = TradeLogFactory.withState({
             type: TradeLogType.buy,
-        }
+        }).make() as ITradelog
 
         // Create a new trade log record
         const newTradeLog = new Tradelog(tradelogData)
@@ -63,15 +61,19 @@ describe('Tradelog', () => {
         expect(savedTradelog.price).toBe(tradelogData.price)
         expect(savedTradelog.unit).toBe(tradelogData.unit)
         expect(savedTradelog.transaction_date.toISOString()).toBe(
-            tradelogData.transaction_date.toISOString()
+            moment(
+                tradelogData.transaction_date,
+                appConfig.format.date
+            ).toISOString()
         )
     })
 
-    it('MODEL tradelog: can retrieve all tradelog data', async () => {
-        const tradelogData: ITradelog[] = genTradelogData(10) as ITradelog[]
-        for (const tradelog of tradelogData) {
-            await Tradelog.create<ITradelog>(tradelog)
-        }
+    it(`#${num++}:MODEL tradelog: can retrieve all tradelog data`, async () => {
+        await Tradelog.deleteAll()
+        const tradelogData: ITradelog[] = (await TradeLogFactory.count(
+            10
+        ).create()) as ITradelog[]
+
         const req: Partial<Request> = {}
 
         const result = await Tradelog.search<
@@ -79,35 +81,35 @@ describe('Tradelog', () => {
             Partial<Request>
         >(req)
 
-        // create new result with only partial of ITredelog
-        const data = result.data.map((data: any) => {
-            return {
-                symbol: data.symbol,
-                price: data.price,
-                unit: data.unit,
-                transaction_date: moment(data.transaction_date).format(
-                    appConfig.format.date
-                ),
-                type: data.type,
-            }
-        })
+        const resultDataFiltered = result.data.map((item: any) => ({
+            symbol: item.symbol,
+            price: item.price,
+            unit: item.unit,
+            transaction_date: item.transaction_date,
+            type: item.type,
+            _id: item._id?.toString(),
+        }))
 
-        let transformedData = {
-            data: data,
-        }
+        const tradelogDataFiltered = tradelogData.map((item) => ({
+            symbol: item.symbol,
+            price: item.price,
+            unit: item.unit,
+            transaction_date: item.transaction_date,
+            type: item.type,
+            _id: item._id?.toString(),
+        }))
 
-        expect(transformedData.data).toEqual(
-            expect.arrayContaining(tradelogData)
-        )
+        expect(resultDataFiltered).toEqual(tradelogDataFiltered)
         expect(result.status).toBe('success')
         expect(result.data).toHaveLength(10)
     })
 
-    it('MODEL tradelog: can retrieve all tradelog data with pagination', async () => {
-        const tradelogData: ITradelog[] = genTradelogData(30) as ITradelog[]
-        for (const tradelog of tradelogData) {
-            await Tradelog.create<ITradelog>(tradelog)
-        }
+    it(`#${num++}:MODEL tradelog: can retrieve all tradelog data with pagination`, async () => {
+        let rs = await Tradelog.find({})
+        const tradelogData = (await TradeLogFactory.count(
+            30
+        ).create()) as ITradelog[]
+
         const req: Partial<Request> = {
             query: {
                 page: '1',
@@ -118,15 +120,15 @@ describe('Tradelog', () => {
             ISearch<ITradelog>,
             Partial<Request>
         >(req)
+
         expect(result.status).toBe('success')
         expect(result.pagination?.last_page).toBe(2)
     })
 
-    it('MODEL tradelog: can retrieve all tradelog data with pagination page 2', async () => {
-        const tradelogData: ITradelog[] = genTradelogData(30) as ITradelog[]
-        for (const tradelog of tradelogData) {
-            await Tradelog.create<ITradelog>(tradelog)
-        }
+    it(`#${num++}:MODEL tradelog: can retrieve all tradelog data with pagination page 2`, async () => {
+        const tradelogData = (await TradeLogFactory.count(
+            30
+        ).create()) as ITradelog[]
         const req: Partial<Request> = {
             query: {
                 page: '2',
@@ -141,11 +143,10 @@ describe('Tradelog', () => {
         expect(result.pagination?.current_page).toBe(2)
     })
 
-    it('MODEL tradelog: can retrieve data with symbol filter', async () => {
-        const tradelogData: ITradelog[] = genTradelogData(30) as ITradelog[]
-        for (const tradelog of tradelogData) {
-            await Tradelog.create<ITradelog>(tradelog)
-        }
+    it(`#${num++}:MODEL tradelog: can retrieve data with symbol filter`, async () => {
+        const tradelogData = (await TradeLogFactory.count(
+            30
+        ).create()) as ITradelog[]
 
         const searchData: ITradelog = {
             symbol: tradelogData[0].symbol,
@@ -174,10 +175,10 @@ describe('Tradelog', () => {
         )
     })
 
-    it('MODEL tradelog: can retrieve empty data', async () => {
+    it(`#${num++}:MODEL tradelog: can retrieve empty data`, async () => {
         const req: Partial<Request> = {
             query: {
-                'page': '1',
+                page: '1',
             },
         }
 
@@ -186,7 +187,6 @@ describe('Tradelog', () => {
             Partial<Request>
         >(req)
 
-        console.log(result)
         expect(result.status).toBe('success')
         expect(result.data).toHaveLength(0)
         expect(result.total).toBe(0)

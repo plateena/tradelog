@@ -10,7 +10,10 @@
     "moduleResolution": "node",
     "traceResolution": true,
     "baseUrl": ".",
-    "types": ["node", "jest", "mongoose"],
+    /** "types": ["node", "jest", "mongoose", "./types"], **/
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "declaration": true,
+    "declarationDir": "./types",
     "paths": {
       "~/*": ["*"],
       "@config/*": ["config/*"],
@@ -24,6 +27,6 @@
       "*": ["node_modules/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx"],
   "exclude": ["node_modules", "dist"]
 }

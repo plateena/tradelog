@@ -1,4 +1,4 @@
-import { TradeLogType } from '../../types/interfaces'
+import { TradeLogType } from '@type/enums'
 import { body } from 'express-validator'
 import moment from 'moment'
 

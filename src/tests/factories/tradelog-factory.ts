@@ -1,16 +1,19 @@
+import { Model } from 'mongoose'
 import Tradelog from '@models/tradelog'
-import { ITradelog, ITradeLogModel, TradeLogType } from '@type/interfaces'
+import type { ITradelog, ITradeLogModel } from '@type/interface'
+import { TradeLogType } from '@type/enums'
 import { faker } from '@faker-js/faker'
-import BaseFactory from '@factories/base-factory'
+import BaseFactory from '@zainundin/mongoose-factory'
 import moment from 'moment'
 import appConfig from '@config/app'
 
-class TradeLogFactory extends BaseFactory<ITradelog> {
+export class TradeLogFactory extends BaseFactory<ITradelog> {
 
     private fake: boolean = true
 
     constructor() {
         super(Tradelog as Model<ITradelog>)
+        return this
     }
 
     setDatefake(fake: boolean): this {
@@ -18,7 +21,7 @@ class TradeLogFactory extends BaseFactory<ITradelog> {
         return this
     }
 
-    definition(): Partial<ITradelog> {
+    definition(): ITradelog {
         const buyDate: string = moment(faker.date.recent({ days: 21 })).format(
             appConfig.format.date
         )
@@ -40,4 +43,6 @@ class TradeLogFactory extends BaseFactory<ITradelog> {
     // Implement specific methods for generating and saving trade log data
 }
 
-export default TradeLogFactory
+const TradeLogFactoryClass = new TradeLogFactory()
+
+export default TradeLogFactoryClass

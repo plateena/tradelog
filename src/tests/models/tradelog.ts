@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
-import { ITradelog, TradeLogType } from '@type/interfaces'
+import { ITradelog } from '@type/interface'
+import { TradeLogType } from '@type/enums'
 import { dateFormat } from '~/helpers'
 import moment from 'moment'
 

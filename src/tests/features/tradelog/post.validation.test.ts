@@ -3,7 +3,8 @@ import { Server } from 'http'
 import makeServer from './../../make-app'
 import { ERROR_MESSAGES } from '@middleware/validations/tradelog'
 import { genTradelogData } from '@tests/models/tradelog'
-import { ITradelog, TradeLogType } from '@type/interfaces'
+import { ITradelog } from '@type/interface'
+import { TradeLogType } from '@type/enums'
 
 /**
  * @group validation/tradelog

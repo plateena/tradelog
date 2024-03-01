@@ -11,11 +11,6 @@ export interface ITradelog {
     type: TradeLogType
 }
 
-export enum TradeLogType {
-    buy = 'buy',
-    sell = 'sell',
-}
-
 export interface IPagination {
     per_page: number | undefined
     current_page: number | undefined

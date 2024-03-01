@@ -1,7 +1,7 @@
 // Path: ./controllers/tradelog.ts
 import { Request, Response } from 'express'
 import Tradelog from '@models/tradelog'
-import { ITradeLogModel, ISearch, ITradelog } from '@type/interfaces'
+import { ITradeLogModel, ISearch, ITradelog } from '@type/interface'
 import { dateFormat } from '~/helpers'
 import moment from 'moment'
 import { tradelogCreateValidation } from '@middleware/validations/tradelog'
